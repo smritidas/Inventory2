@@ -14,7 +14,6 @@ public class ItemDBHelper extends SQLiteOpenHelper{
         super(context, DB_NAME, null, DB_VERSION );
     }
 
-    //TODO Fix item entry
     @Override
     public void onCreate(SQLiteDatabase db){
       final String SQL_CREATE_TABLE = "CREATE TABLE " + ItemContract.ItemEntry.TABLE_NAME + " (" +
