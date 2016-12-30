@@ -20,14 +20,12 @@ import android.widget.ListView;
 
 import com.example.android.inventory.data.ItemContract;
 
-import static android.R.attr.inset;
-
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
    private static final int ITEM_LOADER = 0;
 
-   private CursorAdapter adapter;
+   private ItemCursorAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements
         listView.setEmptyView(listView);
 
         //Setup an adapter
-        adapter = new CursorAdapter(MainActivity.this, null);
+        adapter = new ItemCursorAdapter(MainActivity.this, null);
         listView.setAdapter(adapter);
 
         //Set item on click listener
@@ -115,12 +113,12 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         // Update {@link PetCursorAdapter} with this new cursor containing updated pet data
-        CursorAdapter.swapCursor(data);
+        ItemCursorAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // Callback called when the data needs to be deleted
-        CursorAdapter.swapCursor(null);
+        ItemCursorAdapter.swapCursor(null);
     }
 }

@@ -11,6 +11,8 @@ import com.example.android.inventory.data.ItemContract.ItemEntry;
 
 public class EditorActivity extends AppCompatActivity {
 
+    private static final int ITEM_LOADER = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
