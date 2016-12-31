@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,9 +34,17 @@ public class EditorActivity extends AppCompatActivity implements
     private Button mIncreaseButton;
     private Button mDecreaseButton;
 
-
     private static final int ITEM_LOADER = 0;
 
+    private boolean mItemHasChanged = false;
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener(){
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mItemHasChanged = true;
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +67,27 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantityEditText = (EditText) findViewById(R.id.edit_product_quantity);
         mImage = (ImageView) findViewById(R.id.image);
         mOrderButton = (Button) findViewById(R.id.order_button);
-        mDecreaseButton = (Button) findViewById(R.id.decrease);
         mIncreaseButton = (Button) findViewById(R.id.increase);
+        mDecreaseButton = (Button) findViewById(R.id.decrease);
+
+        mNameEditText.setOnTouchListener(mTouchListener);
+        mPriceEditText.setOnTouchListener(mTouchListener);
+        mQuantityEditText.setOnTouchListener(mTouchListener);
 
     }
+
+    //Create a button to delete everything
+    private int deleteProduct(Uri itemUri) {
+        return getContentResolver().delete(itemUri, null, null);
+    }
+
+    //Get input from user and save into a database
 
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+
+
         return null;
     }
 

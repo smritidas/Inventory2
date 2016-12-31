@@ -15,6 +15,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".EditorActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <provider
+            android:name=".data.ItemProvider"
+            android:authorities="com.example.android.inventory"
+            android:exported="false" />
+
     </application>
 
 </manifest>
