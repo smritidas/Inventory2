@@ -6,6 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.inventory.MainActivity">
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/empty_view"
+        android:text="@string/nothing_here_yet"
+        android:gravity="center"/>
 
     <ListView
         android:id="@+id/list"

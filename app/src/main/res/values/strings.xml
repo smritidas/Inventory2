@@ -12,4 +12,7 @@
     <string name="action_delete">Delete</string>
     <string name="category_overview">Category Overview</string>
     <string name="edit_new_item">Edit New Item</string>
+    <string name="nothing_here_yet">Nothing</string>
+    <string name="new_item">New Item</string>
+    <string name="edit_item">Edit Item</string>
 </resources>
