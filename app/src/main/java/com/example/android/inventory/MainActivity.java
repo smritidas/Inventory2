@@ -20,12 +20,14 @@ import android.widget.ListView;
 
 import com.example.android.inventory.data.ItemContract;
 
+import static android.R.attr.data;
+
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
    private static final int ITEM_LOADER = 0;
 
-   private ItemCursorAdapter adapter;
+   private ItemCursorAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,65 +43,36 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+        ListView itemListView = (ListView) findViewById(R.id.list);
+        mAdapter = new ItemCursorAdapter(this, null);
+        itemListView.setAdapter(mAdapter);
+
+        itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+
+                Uri currentPetUri = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, id);
+                intent.setData(currentPetUri);
+
+                startActivity(intent);
+            }
+        });
         //Find the listview
         final ListView listView = (ListView) findViewById(R.id.list_item);
 
         //This will show when there are zero items to display
         View emptyView = findViewById(R.id.empty_view);
-        listView.setEmptyView(listView);
+        listView.setEmptyView(emptyView);
 
         //Setup an adapter
-        adapter = new ItemCursorAdapter(MainActivity.this, null);
-        listView.setAdapter(adapter);
+        mAdapter = new ItemCursorAdapter(MainActivity.this, null);
+        listView.setAdapter(mAdapter);
 
-        //Set item on click listener
-        listView.setOnClickListener(new AdapterView.OnClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-
-                Uri currentItemUri = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, id);
-                intent.setData(currentItemUri);
-                startActivity(intent);
-
-            }
-        });
-
-        getLoaderManager().initLoader(ITEM_LOADER, null, this);
-    }
-
-    private void deleteAllItems(){
-        int rowsDeleted = getContentResolver().delete(ItemContract.ItemEntry.CONTENT_URI, null, null);
-        Log.v("MainActivity", rowsDeleted + " rows deleted from inventory database");
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu options from the res/menu/menu_catalog.xml file.
-        // This adds menu items to the app bar.
-        getMenuInflater().inflate(R.menu.menu_catalog, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // User clicked on a menu option in the app bar overflow menu
-        switch (item.getItemId()) {
-            // Respond to a click on the "Insert dummy data" menu option
-            case R.id.action_insert_dummy_data:
-                insertItem();
-                return true;
-            // Respond to a click on the "Delete all entries" menu option
-            case R.id.action_delete_all_entries:
-                deleteAllItems();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
         return new CursorLoader(
                 this,                               // Parent activity context
                 ItemContract.ItemEntry.CONTENT_URI,           // Table to query
@@ -110,15 +83,15 @@ public class MainActivity extends AppCompatActivity implements
         );
     }
 
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Update {@link PetCursorAdapter} with this new cursor containing updated pet data
-        ItemCursorAdapter.swapCursor(data);
+        mAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        // Callback called when the data needs to be deleted
-        ItemCursorAdapter.swapCursor(null);
+        mAdapter.swapCursor(null);
     }
+
 }

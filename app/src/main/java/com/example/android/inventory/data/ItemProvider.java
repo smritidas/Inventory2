@@ -15,6 +15,8 @@ import android.util.Log;
 import java.net.URI;
 
 import static android.icu.text.UnicodeSet.CASE;
+import static com.example.android.inventory.R.string.price;
+import static com.example.android.inventory.R.string.quantity;
 
 public class ItemProvider extends ContentProvider {
 
@@ -65,19 +67,31 @@ public class ItemProvider extends ContentProvider {
         return cursor;
     }
 
+    @Override
+    public Uri insert(Uri uri, ContentValues contentValues) {
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ITEMS:
+                return insertItem(uri, contentValues);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
+    }
+
     private Uri insertItem(Uri uri, ContentValues values){
         String name = values.getAsString(ItemContract.ItemEntry.COLUMN_ITEM_NAME);
         if (name == null) {
             throw new IllegalArgumentException("Item requires a name");
         }
 
-        Integer price = values.getAsInteger(ItemContract.ItemEntry.COLUMN_PRICE);
-        if (price == null || !ItemContract.ItemEntry.isValidPrice(price)) {
+        Double price = values.getAsDouble(ItemContract.ItemEntry.COLUMN_PRICE);
+        if (price == null || price < 0) {
             throw new IllegalArgumentException("Item requires a valid price");
         }
 
         Integer quantity = values.getAsInteger(ItemContract.ItemEntry.COLUMN_QUANTITY);
-        if (price == null || !ItemContract.ItemEntry.isValidQuantity(price)) {
+        if (quantity == null || quantity < 0) {
             throw new IllegalArgumentException("Item requires a valid quantity");
         }
 
@@ -98,25 +112,106 @@ public class ItemProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
-        return 0;
+    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ITEMS:
+                return updateItem(uri, contentValues, selection, selectionArgs);
+            case ITEMS_ID:
+                // For the PET_ID code, extract out the ID from the URI,
+                // so we know which row to update. Selection will be "_id=?" and selection
+                // arguments will be a String array containing the actual ID.
+                selection = ItemContract.ItemEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return updateItem(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
     }
+
+    private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs){
+        if (values.containsKey(ItemContract.ItemEntry.COLUMN_ITEM_NAME)){
+            String name = values.getAsString(ItemContract.ItemEntry.COLUMN_ITEM_NAME);
+            if (name == null) {
+                throw new IllegalArgumentException("Item requires a name");
+            }
+        }
+
+        if (values.containsKey(ItemContract.ItemEntry.COLUMN_PRICE)) {
+            Double price = values.getAsDouble(ItemContract.ItemEntry.COLUMN_PRICE);
+            if (price == null || price < 0.00 ) {
+                throw new IllegalArgumentException("Pet requires a valid price");
+            }
+        }
+
+        if (values.containsKey(ItemContract.ItemEntry.COLUMN_QUANTITY)) {
+            Integer amount = values.getAsInteger(ItemContract.ItemEntry.COLUMN_QUANTITY);
+            if (amount == null || amount < 0 ) {
+                throw new IllegalArgumentException("Not a valid quantity");
+            }
+        }
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        SQLiteDatabase database = mDBHelper.getWritableDatabase();
+
+        int rowsUpdated = database.update(ItemContract.ItemEntry.TABLE_NAME, values, selection, selectionArgs);
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsUpdated;
+
+    }
+
 
     @Override
-    public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+
+        SQLiteDatabase database = mDBHelper.getWritableDatabase();
+
+        // Track the number of rows that were deleted
+        int rowsDeleted;
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ITEMS:
+                // Delete all rows that match the selection and selection args
+                rowsDeleted = database.delete(ItemContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case ITEMS_ID:
+                // Delete a single row given by the ID in the URI
+                selection = ItemContract.ItemEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                rowsDeleted = database.delete(ItemContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
+        // If 1 or more rows were deleted, then notify all listeners that the data at the
+        // given URI has changed
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        // Return the number of rows deleted
+        return rowsDeleted;
+
     }
 
-    @Override
-    public int delete(Uri uri, String s, String[] strings) {
-        return 0;
-    }
-
-
-
-    @Nullable
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ITEMS:
+                return ItemContract.ItemEntry.CONTENT_LIST_TYPE;
+            case ITEMS_ID:
+                return ItemContract.ItemEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 }
