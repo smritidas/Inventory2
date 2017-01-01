@@ -36,17 +36,20 @@
 
             <Button
                 android:id="@+id/order_button"
+                android:text="@string/Place_Order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/increase"
+                android:text="+"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
 
             <Button
                 android:id="@+id/decrease"
+                android:text="-"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

@@ -58,8 +58,10 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
+
+        //TODO this is where the error begins
         //Find the listview
-        final ListView listView = (ListView) findViewById(R.id.list_item);
+        ListView listView = (ListView) findViewById(R.id.list_item);
 
         //This will show when there are zero items to display
         View emptyView = findViewById(R.id.empty_view);
@@ -70,6 +72,31 @@ public class MainActivity extends AppCompatActivity implements
         listView.setAdapter(mAdapter);
 
     }
+
+    private void deleteAllItems(){
+        int rowsDeleted = getContentResolver().delete(ItemContract.ItemEntry.CONTENT_URI, null, null);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu options from the res/menu/menu_catalog.xml file.
+        // This adds menu items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_catalog, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // User clicked on a menu option in the app bar overflow menu
+        switch (item.getItemId()) {
+            // Respond to a click on the "Delete all entries" menu option
+            case R.id.action_delete_all_entries:
+                deleteAllItems();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

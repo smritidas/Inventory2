@@ -15,4 +15,16 @@
     <string name="nothing_here_yet">Nothing</string>
     <string name="new_item">New Item</string>
     <string name="edit_item">Edit Item</string>
+    <string name="editor_error">Editor Error</string>
+    <string name="editor_insert_success">Success!</string>
+    <string name="editor_update_item_failed">Update failed</string>
+    <string name="editor_update_pet_successful">Update success</string>
+    <string name="unsaved_changes_dialog_msg">Changes not saved</string>
+    <string name="discard">Discard</string>
+    <string name="delete_dialog_msg">Delete</string>
+    <string name="keep_editing">Keep editing</string>
+    <string name="cancel">Cancel</string>
+    <string name="editor_delete_pet_failed">Could not delete pet</string>
+    <string name="editor_delete_pet_successful">Success!</string>
+
 </resources>
