@@ -25,7 +25,7 @@ import static android.R.attr.data;
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-   private static final int ITEM_LOADER = 0;
+    private static final int ITEM_LOADER = 0;
 
    private ItemCursorAdapter mAdapter;
 
@@ -43,7 +43,15 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+        //find the listview that will be populated
         ListView itemListView = (ListView) findViewById(R.id.list);
+
+        //according to UDACITY I should set the empty list view here
+        //This will show when there are zero items to display
+        View emptyView = findViewById(R.id.empty_view);
+        itemListView.setEmptyView(emptyView);
+
+        //setup an adapter to create a list item
         mAdapter = new ItemCursorAdapter(this, null);
         itemListView.setAdapter(mAdapter);
 
@@ -58,18 +66,6 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
-
-        //TODO this is where the error begins
-        //Find the listview
-        ListView listView = (ListView) findViewById(R.id.list_item);
-
-        //This will show when there are zero items to display
-        View emptyView = findViewById(R.id.empty_view);
-        listView.setEmptyView(emptyView);
-
-        //Setup an adapter
-        mAdapter = new ItemCursorAdapter(MainActivity.this, null);
-        listView.setAdapter(mAdapter);
 
     }
 
