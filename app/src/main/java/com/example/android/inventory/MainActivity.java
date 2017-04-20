@@ -117,4 +117,6 @@ public class MainActivity extends AppCompatActivity implements
         mAdapter.swapCursor(null);
     }
 
+    //TODO figure out why crashing
+
 }
