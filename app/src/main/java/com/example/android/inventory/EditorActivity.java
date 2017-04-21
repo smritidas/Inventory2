@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -41,10 +42,17 @@ public class EditorActivity extends AppCompatActivity implements
     private Button mIncreaseButton;
     private Button mDecreaseButton;
 
+    //identifier for the loader
     private static final int ITEM_LOADER = 0;
 
+    /**
+     * Boolean flag that keeps track of whether the pet has been edited
+     */
     private boolean mItemHasChanged = false;
 
+    /**
+     * OnTouchListener that listens for any touches on the view
+     */
     private View.OnTouchListener mTouchListener = new View.OnTouchListener(){
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -58,16 +66,29 @@ public class EditorActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
+        //Either we are editing or launching a new intent
         Intent intent = getIntent();
         mCurrentItem = intent.getData();
 
-        if (mCurrentItem == null){
+        //If there is no new URL we are creating a new intent
+        if (mCurrentItem == null) {
+            //telling it to input a new item
             setTitle(getString(R.string.new_item));
+
+            //no point showing delete if there is nothing to delete
             invalidateOptionsMenu();
-        } else{
+
+        } else {
+            //otherwise change app bar to edit an existing item
             setTitle(getString(R.string.edit_item));
+
+            //Display currrent values in the editor
             getLoaderManager().initLoader(ITEM_LOADER,null, this);
         }
+
+
+        //All the views to get information from the user
+
 
         mNameEditText = (EditText) findViewById(R.id.edit_product_name);
         mPriceEditText= (EditText) findViewById(R.id.edit_product_price);
@@ -76,27 +97,55 @@ public class EditorActivity extends AppCompatActivity implements
         mIncreaseButton = (Button) findViewById(R.id.increase);
         mDecreaseButton = (Button) findViewById(R.id.decrease);
 
+        //setup all the ontouch listeners
         mNameEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
 
+        //TODO setup touch listeners for the increase and decrease
+        //TODO(2) How is order handled?
+
+        mIncreaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //put some code here
+            }
+        });
+
+
+        mDecreaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //put some code here
+            }
+        });
+
     }
 
-    //Get input from user and save into a database
-    private void saveItem(){
+    //Get input from user and save into a database also cut off any whitespace
+    private void saveItem() {
         String nameString = mNameEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
+
+        //(1) check if this is blank and (2) check if it a new item
+        if (mCurrentItem == null &&
+                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) &&
+                TextUtils.isEmpty(quantityString)) {
+            // Since no fields were modified, we can return early without creating a new item.
+            // No need to create ContentValues and no need to do any ContentProvider operations.
+            return;
+        }
 
         ContentValues values = new ContentValues();
         values.put(ItemEntry.COLUMN_ITEM_NAME, nameString);
         values.put(ItemEntry.COLUMN_PRICE, priceString);
         values.put(ItemEntry.COLUMN_QUANTITY, quantityString);
 
-// Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not
+        // Determine if this is a new or existing item by checking if mCurrentItem is null or not
         if (mCurrentItem == null) {
-            // This is a NEW pet, so insert a new pet into the provider,
-            // returning the content URI for the new pet.
+            // This is a new item
+            // returning the content URI for the new item
             Uri newUri = getContentResolver().insert(ItemEntry.CONTENT_URI, values);
 
             // Show a toast message depending on whether or not the insertion was successful.
@@ -110,10 +159,7 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         } else {
-            // Otherwise this is an EXISTING pet, so update the pet with content URI: mCurrentPetUri
-            // and pass in the new ContentValues. Pass in null for the selection and selection args
-            // because mCurrentPetUri will already identify the correct row in the database that
-            // we want to modify.
+            // Otherwise this is an existing item
             int rowsAffected = getContentResolver().update(mCurrentItem, values, null, null);
 
             // Show a toast message depending on whether or not the update was successful.
@@ -145,7 +191,7 @@ public class EditorActivity extends AppCompatActivity implements
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        // If this is a new pet, hide the "Delete" menu item.
+        // If this is a new item, hide the "Delete" menu item.
         if (mCurrentItem == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
@@ -158,7 +204,7 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                // Save pet to database
+                // Save item to database
                 saveItem();
                 // Exit activity
                 finish();
@@ -170,7 +216,7 @@ public class EditorActivity extends AppCompatActivity implements
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-                // If the pet hasn't changed, continue with navigating up to parent activity
+                // If the item hasn't changed, continue with navigating up to parent activity
                 // which is the {@link CatalogActivity}.
                 if (!mItemHasChanged) {
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
