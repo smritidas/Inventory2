@@ -25,7 +25,7 @@ import static android.R.attr.data;
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final int ITEM_LOADER = 0;
+    //private static final int ITEM_LOADER = 0;
 
    private ItemCursorAdapter mAdapter;
 
