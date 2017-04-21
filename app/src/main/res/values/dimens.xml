@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="activity_margin">16dp</dimen>
+    <dimen name="padding_top">16dp</dimen>
+    <dimen name="editor_padding_top">32dp</dimen>
 </resources>

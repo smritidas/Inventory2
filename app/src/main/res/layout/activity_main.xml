@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/empty_view"
         android:text="@string/nothing_here_yet"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:paddingTop="@dimen/padding_top"/>
 
     <ListView
         android:id="@+id/list"

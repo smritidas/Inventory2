@@ -9,7 +9,7 @@
 
 
         <TextView
-            android:text="Add Items"
+            android:text="@string/add_item"
             android:layout_height="wrap_content"
             android:layout_width="match_parent" />
 
@@ -34,25 +34,34 @@
                 android:hint="@string/product_quantity"
                 />
 
-            <Button
-                android:id="@+id/order_button"
-                android:text="@string/Place_Order"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:padding="@dimen/editor_padding_top">
 
-            <Button
-                android:id="@+id/increase"
-                android:text="+"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/increase"
+                    android:text="@string/added"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="ButtonStyle" />
 
+                <Button
+                    android:id="@+id/order_button"
+                    android:text="@string/Place_Order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="ButtonStyle" />
 
-            <Button
-                android:id="@+id/decrease"
-                android:text="-"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
+                <Button
+                    android:id="@+id/decrease"
+                    android:text="@string/subtracted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="ButtonStyle" />
+            </LinearLayout>
 
         </LinearLayout>
 

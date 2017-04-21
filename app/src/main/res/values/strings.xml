@@ -12,8 +12,8 @@
     <string name="action_delete">Delete</string>
     <string name="category_overview">Category Overview</string>
     <string name="edit_new_item">Edit New Item</string>
-    <string name="nothing_here_yet">Nothing</string>
-    <string name="new_item">New Item</string>
+    <string name="nothing_here_yet">Nothing here yet!</string>
+    <string name="add_item">Add Item</string>
     <string name="edit_item">Edit Item</string>
     <string name="editor_error">Editor Error</string>
     <string name="editor_insert_success">Success!</string>
@@ -26,5 +26,7 @@
     <string name="cancel">Cancel</string>
     <string name="editor_delete_pet_failed">Could not delete pet</string>
     <string name="editor_delete_pet_successful">Success!</string>
+    <string name="added">+</string>
+    <string name="subtracted">-</string>
 
 </resources>
