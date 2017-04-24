@@ -157,7 +157,7 @@ public class EditorActivity extends AppCompatActivity implements
                 // Otherwise, the insertion was successful and we can display a toast.
                 Toast.makeText(this, getString(R.string.editor_insert_success),
                         Toast.LENGTH_SHORT).show();
-            }
+            } //TODO It works up to here, but data is not saving. Also insert dummy data
         } else {
             // Otherwise this is an existing item
             int rowsAffected = getContentResolver().update(mCurrentItem, values, null, null);
@@ -184,10 +184,7 @@ public class EditorActivity extends AppCompatActivity implements
         return true;
     }
 
-    /**
-     * This method is called after invalidateOptionsMenu(), so that the
-     * menu can be updated (some menu items can be hidden or made visible).
-     */
+    //Called after invalidateOptionsMenu so that it can be updated
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
@@ -198,6 +195,7 @@ public class EditorActivity extends AppCompatActivity implements
         }
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
@@ -217,7 +215,7 @@ public class EditorActivity extends AppCompatActivity implements
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
                 // If the item hasn't changed, continue with navigating up to parent activity
-                // which is the {@link CatalogActivity}.
+                // which is the {@link MainActivity}.
                 if (!mItemHasChanged) {
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
                     return true;
@@ -241,12 +239,9 @@ public class EditorActivity extends AppCompatActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
-    /**
-     * This method is called when the back button is pressed.
-     */
+
     @Override
     public void onBackPressed() {
-        // If the pet hasn't changed, continue with handling back button press
         if (!mItemHasChanged) {
             super.onBackPressed();
             return;

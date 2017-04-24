@@ -2,6 +2,7 @@ package com.example.android.inventory;
 
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements
         //find the listview that will be populated
         ListView itemListView = (ListView) findViewById(R.id.list);
 
-        //according to UDACITY I should set the empty list view here
         //This will show when there are zero items to display
         View emptyView = findViewById(R.id.empty_view);
         itemListView.setEmptyView(emptyView);
@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
 
-                Uri currentPetUri = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, id);
-                intent.setData(currentPetUri);
+                Uri currentItemUri = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, id);
+                intent.setData(currentItemUri);
 
                 startActivity(intent);
             }
@@ -69,8 +69,20 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    //Helper method. Didn't include this earlier. For debugging purposes.
+
+    private void insertItems() {
+        ContentValues values = new ContentValues();
+        values.put(ItemContract.ItemEntry.COLUMN_ITEM_NAME, "Cupcake");
+        values.put(ItemContract.ItemEntry.COLUMN_PRICE, "2.99");
+        values.put(ItemContract.ItemEntry.COLUMN_QUANTITY, "2");
+        Uri newUri = getContentResolver().insert(ItemContract.ItemEntry.CONTENT_URI, values);
+
+    }
+
     private void deleteAllItems(){
         int rowsDeleted = getContentResolver().delete(ItemContract.ItemEntry.CONTENT_URI, null, null);
+        Log.v("MainActivity", rowsDeleted + " rows deleted from the database");
     }
 
     @Override
@@ -85,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
+            case R.id.action_insert_dummy_data:
+                insertItems();
+                return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
                 deleteAllItems();
@@ -94,15 +109,23 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        //Define a projection. Forgot to do this earlier.
+        String[] projection = {
+                ItemContract.ItemEntry._ID,
+                ItemContract.ItemEntry.COLUMN_ITEM_NAME,
+                ItemContract.ItemEntry.COLUMN_PRICE,
+                ItemContract.ItemEntry.COLUMN_QUANTITY};
+
         return new CursorLoader(
                 this,                               // Parent activity context
                 ItemContract.ItemEntry.CONTENT_URI,           // Table to query
-                null,                               // Projection to return
+                projection,                         //what to show
                 null,                               // No selection clause
                 null,                               // No selection arguments
-                null
+                null                                //default sort order
         );
     }
 
@@ -117,6 +140,5 @@ public class MainActivity extends AppCompatActivity implements
         mAdapter.swapCursor(null);
     }
 
-    //TODO figure out why crashing
 
 }
