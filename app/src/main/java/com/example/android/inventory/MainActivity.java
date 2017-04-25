@@ -20,14 +20,15 @@ import android.widget.ListView;
 
 import com.example.android.inventory.data.ItemContract;
 
-import static android.R.attr.data;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     private static final int ITEM_LOADER = 0;
 
-   private ItemCursorAdapter mAdapter;
+    private ItemCursorAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,14 +112,15 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //Define a projection. Forgot to do this earlier.
         String[] projection = {
-                ItemContract.ItemEntry._ID,
                 ItemContract.ItemEntry.COLUMN_ITEM_NAME,
                 ItemContract.ItemEntry.COLUMN_PRICE,
                 ItemContract.ItemEntry.COLUMN_QUANTITY};
+
 
         return new CursorLoader(
                 this,                               // Parent activity context
