@@ -5,11 +5,23 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+//Database helper for the app
+
 public class ItemDBHelper extends SQLiteOpenHelper{
 
+
+    //name of the database
     public final static String DB_NAME = "inventory.db";
+
+    //database version
     public final static int DB_VERSION = 1;
 
+
+    /**
+     * Constructs a new instance of {@link ItemDBHelper}
+     *
+     * @param context of the app
+     */
     public ItemDBHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION );
     }
@@ -19,14 +31,15 @@ public class ItemDBHelper extends SQLiteOpenHelper{
       final String SQL_CREATE_TABLE = "CREATE TABLE " + ItemContract.ItemEntry.TABLE_NAME + " (" +
               ItemContract.ItemEntry.COLUMN_ID + " INTEGER PRIMARY KEY," +
               ItemContract.ItemEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL," +
-              ItemContract.ItemEntry.COLUMN_PRICE + " INTEGER NOT NULL," +
+              ItemContract.ItemEntry.COLUMN_PRICE + " REAL NOT NULL DEFAULT 0," +
               ItemContract.ItemEntry.COLUMN_QUANTITY + " INTEGER NOT NULL);";
 
         db.execSQL(SQL_CREATE_TABLE);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // The database is still at version 1, so there's nothing to do be done here.
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ItemContract.ItemEntry.TABLE_NAME);
+        onCreate(sqLiteDatabase);
     }
 }
