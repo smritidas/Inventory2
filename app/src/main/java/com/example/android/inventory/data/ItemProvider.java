@@ -20,17 +20,29 @@ import static com.example.android.inventory.R.string.quantity;
 
 public class ItemProvider extends ContentProvider {
 
+    //Tag for the log messages
+    public static final String LOG_TAG = ItemProvider.class.getSimpleName();
+
+    //URI matcher code for the content URI for the entire table
     public static final int ITEMS = 100;
 
+    //URI matcher code for the content URI for a single item in the table
     public static final int ITEMS_ID = 101;
 
+    /**
+     * UriMatcher object to match a content URI to a corresponding code.
+     * The input passed into the constructor represents the code to return for the root URI.
+     * It's common to use NO_MATCH as the input for this case.
+     */
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+    //This is static and runs the first time anything is called from this class.
     static {
         sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEM, ITEMS);
         sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEM + "/#", ITEMS_ID);
     }
 
+    //Database helper object
     private ItemDBHelper mDBHelper;
 
     @Override
@@ -38,6 +50,7 @@ public class ItemProvider extends ContentProvider {
         mDBHelper = new ItemDBHelper(getContext());
         return true;
     }
+
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
