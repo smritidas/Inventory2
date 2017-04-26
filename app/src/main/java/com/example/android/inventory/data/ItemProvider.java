@@ -18,6 +18,8 @@ import static android.icu.text.UnicodeSet.CASE;
 import static com.example.android.inventory.R.string.price;
 import static com.example.android.inventory.R.string.quantity;
 
+//TODO check the import statements
+
 public class ItemProvider extends ContentProvider {
 
     //Tag for the log messages
@@ -57,6 +59,7 @@ public class ItemProvider extends ContentProvider {
 
         SQLiteDatabase database = mDBHelper.getReadableDatabase();
 
+        //hold the results of the query
         Cursor cursor;
 
         int match = sUriMatcher.match(uri);
@@ -76,6 +79,7 @@ public class ItemProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
+        //
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
@@ -108,6 +112,7 @@ public class ItemProvider extends ContentProvider {
             throw new IllegalArgumentException("Item requires a valid quantity");
         }
 
+        // Get writeable database
         SQLiteDatabase database = mDBHelper.getWritableDatabase();
 
         // Insert the new pet with the given values
@@ -132,7 +137,7 @@ public class ItemProvider extends ContentProvider {
             case ITEMS:
                 return updateItem(uri, contentValues, selection, selectionArgs);
             case ITEMS_ID:
-                // For the PET_ID code, extract out the ID from the URI,
+                // For the ITEMS_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = ItemContract.ItemEntry._ID + "=?";
@@ -170,11 +175,15 @@ public class ItemProvider extends ContentProvider {
 
         SQLiteDatabase database = mDBHelper.getWritableDatabase();
 
+        // Update the database and get the number of rows affected
         int rowsUpdated = database.update(ItemContract.ItemEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        // This is called if more than 1 row gets updated
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
+        // Return the number of rows updated
         return rowsUpdated;
 
     }
