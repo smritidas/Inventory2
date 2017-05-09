@@ -26,10 +26,10 @@ public class ItemProvider extends ContentProvider {
     public static final String LOG_TAG = ItemProvider.class.getSimpleName();
 
     //URI matcher code for the content URI for the entire table
-    public static final int ITEMS = 100;
+    public static final int INVENTORY = 100;
 
     //URI matcher code for the content URI for a single item in the table
-    public static final int ITEMS_ID = 101;
+    public static final int INVENTORY_ID = 101;
 
     /**
      * UriMatcher object to match a content URI to a corresponding code.
@@ -40,8 +40,8 @@ public class ItemProvider extends ContentProvider {
 
     //This is static and runs the first time anything is called from this class.
     static {
-        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEM, ITEMS);
-        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEM + "/#", ITEMS_ID);
+        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEM, INVENTORY);
+        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_ITEM + "/#", INVENTORY_ID);
     }
 
     //Database helper object
@@ -64,13 +64,13 @@ public class ItemProvider extends ContentProvider {
 
         int match = sUriMatcher.match(uri);
         switch (match) {
-            case ITEMS:
+            case INVENTORY:
 
             cursor = database.query(ItemContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
                     null, null, sortOrder);
             break;
 
-            case ITEMS_ID:
+            case INVENTORY_ID:
                 selection = ItemContract.ItemEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 cursor = database.query(ItemContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
@@ -89,7 +89,7 @@ public class ItemProvider extends ContentProvider {
 
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case ITEMS:
+            case INVENTORY:
                 return insertItem(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
@@ -134,9 +134,9 @@ public class ItemProvider extends ContentProvider {
 
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case ITEMS:
+            case INVENTORY:
                 return updateItem(uri, contentValues, selection, selectionArgs);
-            case ITEMS_ID:
+            case INVENTORY_ID:
                 // For the ITEMS_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
@@ -199,11 +199,11 @@ public class ItemProvider extends ContentProvider {
 
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case ITEMS:
+            case INVENTORY:
                 // Delete all rows that match the selection and selection args
                 rowsDeleted = database.delete(ItemContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case ITEMS_ID:
+            case INVENTORY_ID:
                 // Delete a single row given by the ID in the URI
                 selection = ItemContract.ItemEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
@@ -228,9 +228,9 @@ public class ItemProvider extends ContentProvider {
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case ITEMS:
+            case INVENTORY:
                 return ItemContract.ItemEntry.CONTENT_LIST_TYPE;
-            case ITEMS_ID:
+            case INVENTORY_ID:
                 return ItemContract.ItemEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);

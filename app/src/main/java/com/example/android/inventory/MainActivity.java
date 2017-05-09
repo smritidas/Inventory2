@@ -110,13 +110,11 @@ public class MainActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //Define a projection. Forgot to do this earlier.
         String[] projection = {
+                ItemContract.ItemEntry._ID,
                 ItemContract.ItemEntry.COLUMN_ITEM_NAME,
                 ItemContract.ItemEntry.COLUMN_PRICE,
                 ItemContract.ItemEntry.COLUMN_QUANTITY};

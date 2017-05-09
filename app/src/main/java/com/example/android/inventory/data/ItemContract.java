@@ -26,6 +26,7 @@ public class ItemContract {
     //Possible path. Check Pets app for explanation.
     public static final String PATH_ITEM = "inventory";
 
+    //Inner class that represents constant values
     public static final class ItemEntry implements BaseColumns{
 
         //Content URI to access data in the provider
@@ -40,9 +41,9 @@ public class ItemContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEM;
 
         //Name of database table
-        public static final String TABLE_NAME = "item";
+        public static final String TABLE_NAME = "inventory";
 
-        public static final String COLUMN_ID = BaseColumns._ID;
+        public static final String _ID = BaseColumns._ID;
 
 
         public static final String COLUMN_ITEM_NAME = "name";

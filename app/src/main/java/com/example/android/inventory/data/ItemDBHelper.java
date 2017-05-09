@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ItemDBHelper extends SQLiteOpenHelper{
 
-
     //name of the database
     public final static String DB_NAME = "inventory.db";
 
@@ -26,12 +25,13 @@ public class ItemDBHelper extends SQLiteOpenHelper{
         super(context, DB_NAME, null, DB_VERSION );
     }
 
+    //called when database is called for the first time
     @Override
     public void onCreate(SQLiteDatabase db){
-      final String SQL_CREATE_TABLE = "CREATE TABLE " + ItemContract.ItemEntry.TABLE_NAME + " (" +
-              ItemContract.ItemEntry.COLUMN_ID + " INTEGER PRIMARY KEY," +
-              ItemContract.ItemEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL," +
-              ItemContract.ItemEntry.COLUMN_PRICE + " REAL NOT NULL DEFAULT 0," +
+        String SQL_CREATE_TABLE = "CREATE TABLE " + ItemContract.ItemEntry.TABLE_NAME + " (" +
+                ItemContract.ItemEntry._ID + " INTEGER PRIMARY KEY, " +
+                ItemContract.ItemEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL, " +
+                ItemContract.ItemEntry.COLUMN_PRICE + " REAL NOT NULL DEFAULT 0, " +
               ItemContract.ItemEntry.COLUMN_QUANTITY + " INTEGER NOT NULL);";
 
         db.execSQL(SQL_CREATE_TABLE);
