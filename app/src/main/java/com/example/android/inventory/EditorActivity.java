@@ -46,7 +46,7 @@ public class EditorActivity extends AppCompatActivity implements
     private static final int ITEM_LOADER = 0;
 
     /**
-     * Boolean flag that keeps track of whether the pet has been edited
+     * Boolean flag that keeps track of whether the item has been edited
      */
     private boolean mItemHasChanged = false;
 
