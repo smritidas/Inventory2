@@ -24,11 +24,10 @@ import com.example.android.inventory.data.ItemContract;
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    // private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final int ITEM_LOADER = 0;
 
-    //variable for adapter
     private ItemCursorAdapter mAdapter;
 
     @Override
