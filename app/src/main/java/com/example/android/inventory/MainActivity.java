@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final int ITEM_LOADER = 0;
 
+    //variable for adapter
     private ItemCursorAdapter mAdapter;
 
     @Override
