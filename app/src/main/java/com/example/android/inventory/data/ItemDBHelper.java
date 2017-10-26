@@ -34,7 +34,7 @@ public class ItemDBHelper extends SQLiteOpenHelper{
                 + ItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ItemEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL, "
                 + ItemEntry.COLUMN_PRICE + " REAL NOT NULL DEFAULT 0.0, "
-                + ItemEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
+                + ItemEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0"
                 + ");";
 
         db.execSQL(SQL_CREATE_TABLE);

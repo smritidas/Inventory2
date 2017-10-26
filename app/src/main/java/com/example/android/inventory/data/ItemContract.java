@@ -23,7 +23,7 @@ public class ItemContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
 
-    //Possible path. Check Pets app for explanation.
+    //Possible path
     public static final String PATH_ITEM = "inventory";
 
     //Inner class that represents constant values
