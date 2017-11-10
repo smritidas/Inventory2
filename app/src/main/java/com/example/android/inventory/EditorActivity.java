@@ -31,8 +31,7 @@ import static android.icu.lang.UCharacter.JoiningGroup.E;
  * Either add a new item or edit an existing one.
  */
 
-//TODO (1) How will order be handled? I want it to show a toast (should be in onClick)
-//TODO (2) How will the increase and decrease buttons work?
+
 
 public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>{
@@ -108,6 +107,8 @@ public class EditorActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 //put some code here
+                addOne();
+                mItemHasChanged = true;
             }
         });
 
@@ -116,6 +117,8 @@ public class EditorActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 //put some code here
+                removeOne();
+                mItemHasChanged = true;
             }
         });
 
@@ -125,6 +128,34 @@ public class EditorActivity extends AppCompatActivity implements
                 Toast.makeText(getApplicationContext(), "Order submitted!", Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+
+    private void addOne() {
+        String previousValueString = mQuantityEditText.getText().toString();
+        int previousValue;
+        if (previousValueString.isEmpty()) {
+            return;
+        } else if (previousValueString.equals("0")) {
+            return;
+        } else {
+            previousValue = Integer.parseInt(previousValueString);
+            mQuantityEditText.setText(String.valueOf(previousValue + 1));
+        }
+
+    }
+
+    private void removeOne() {
+        String previousValueString = mQuantityEditText.getText().toString();
+        int previousValue;
+        if (previousValueString.isEmpty()) {
+            return;
+        } else if (previousValueString.equals("0")) {
+            return;
+        } else {
+            previousValue = Integer.parseInt(previousValueString);
+            mQuantityEditText.setText(String.valueOf(previousValue - 1));
+        }
 
     }
 
