@@ -31,6 +31,9 @@ import static android.icu.lang.UCharacter.JoiningGroup.E;
  * Either add a new item or edit an existing one.
  */
 
+//TODO (1) How will order be handled? I want it to show a toast (should be in onClick)
+//TODO (2) How will the increase and decrease buttons work?
+
 public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -38,9 +41,9 @@ public class EditorActivity extends AppCompatActivity implements
     private EditText mNameEditText;
     private EditText mPriceEditText;
     private EditText mQuantityEditText;
-    private Button mOrderButton;
-    private Button mIncreaseButton;
-    private Button mDecreaseButton;
+    private Button mOrderButton; //this needs to be used somewhere
+    private Button mIncreaseButton; //need to increment
+    private Button mDecreaseButton; //used to decrement
 
     //identifier for the loader
     private static final int ITEM_LOADER = 0;
@@ -49,6 +52,7 @@ public class EditorActivity extends AppCompatActivity implements
      * Boolean flag that keeps track of whether the item has been edited
      */
     private boolean mItemHasChanged = false;
+
 
     /**
      * OnTouchListener that listens for any touches on the view
@@ -88,8 +92,6 @@ public class EditorActivity extends AppCompatActivity implements
 
 
         //All the views to get information from the user
-
-
         mNameEditText = (EditText) findViewById(R.id.edit_product_name);
         mPriceEditText= (EditText) findViewById(R.id.edit_product_price);
         mQuantityEditText = (EditText) findViewById(R.id.edit_product_quantity);
@@ -101,9 +103,6 @@ public class EditorActivity extends AppCompatActivity implements
         mNameEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
-
-        //TODO setup touch listeners for the increase and decrease
-        //TODO(2) How is order handled?
 
         mIncreaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +119,15 @@ public class EditorActivity extends AppCompatActivity implements
             }
         });
 
+        mOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Order submitted!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
+
 
     //Get input from user and save into a database also cut off any whitespace
     private void saveItem() {

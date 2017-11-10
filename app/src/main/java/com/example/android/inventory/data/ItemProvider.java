@@ -198,7 +198,6 @@ public class ItemProvider extends ContentProvider {
             throw new IllegalArgumentException("Cannot update empty values");
         }
 
-        //todo add Validations of fields that are updated
 
         switch (match) {
             case INVENTORY:
